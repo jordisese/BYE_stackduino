@@ -1,0 +1,104 @@
+ByE (Birras y Estrellas) - StackDuino 
+
+#############################################################
+# Modos de trabajo                                          #
+#############################################################
+1 - Start/End
+Se marcan las posiciones START y END siguiendo lo que aparece en pantalla. Después se establece el desplazamiento en pasos (ya aparece el valor editable; ojo que también se puede editar el núm.fotos) y una vez grabado ya se puede empezar el proceso con el botón *verde*
+
+2 - Manual
+Se toma como posición START la actual. Simplemente se edita el valor del desplazamiento por foto, o el número de fotos, y ya se puede disparar el proceso. pulsando el botón *verde* 
+También se puede usar este modo si solamente se define la posición START
+
+3 - Foto
+En cualquier momento, al pulsar el botón *rojo* se dispara una foto en la posición actual, sin movimiento del carril
+
+#############################################################
+# Parámetros/Opciones del menú (* disponibles en modo FAST) #
+#############################################################
+[Set START pos.]*
+En modo Star/End, marcar una posición como la de inicio de secuencia
+[Set END pos.]*
+En modo Star/End, marcar una posición como la de final de secuencia
+[Step distance]*
+Número de pasos a avanzar en cada foto de la secuencia	
+[Number of shots]*
+Número de fotos a realizar en la secuencia. En modo Start/End, al modificarla se recalcula la distancia entre tomas.
+[Return to start]
+Si está activado, al final de la secuencia, regresa al punto de partida
+[Exposure time]
+Tiempo que se deja a la cámara para que realice la foto
+[Exp. post delay]
+Pausa tras el disparo de la cámara, para asegurar que ha acabado
+[Motor post delay]
+Pausa tras el movimiento del motor antes del disparo de la cámara, para eliminar vibraciones
+[Step delay*stack]
+Pausa entre pasos (menor pausa -> mayor velocidad) en el momento de la realización de secuencia
+[Step delay*slow]
+Pausa entre pasos (menor pausa -> mayor velocidad) con los mandos de avance manual
+[Step delay*fast]
+Pausa entre pasos (menor pausa -> mayor velocidad) con los mandos de avance manual en modo FAST (led de avance rápido encendido)
+[Button latency]
+Periodo en el que se supone que las teclas quedan pulsadas, para evitar consultar el estado de las teclas demasiado a menudo
+[GoTo speed]
+Velocidad en los GoTos (stack/slow/fast) 
+[Mirror lockup]
+Aplcar o no bloqueo de espejo de cámara en los disparos - activarlo o no según lo esté en la cámara
+[Bracketing]
+Número de fotos a disparar en cada posición
+[Unit of measure]
+Unidad de medida - Microns (milésimas), Milímetros, Centímetros
+[Motor steps/rev.]
+(informativo) Pasos enteros por vuelta. Combinado con los micropasos (Driver uSteps) y el avance por vuelta del eje (Shaft revolution) se usa para calcular la distancia que se avanza por paso
+[Driver model]
+(informativo) Modelo de driver
+[Driver uSteps]
+(informativo) Micropasos activados en el driver 
+[Driver disable]
+- Never! - nunca apaga el driver: más preciso, pero consume más y se calientan los motores (mantiene todo el tiempo las bobinas alimentadas)
+- Only manual m. - el driver se apaga cuando no está en uso y NO está en secuencia (recomendado)
+- When possible - el driver se apaga cada vez que se deja de mover el motor (*no* se recomienda)
+[Shaft revolution]
+Distancia que se avanza por vuelta. Se usa para calcular la distancia por paso
+[Min. bunch of steps]
+Bloque de pasos que se mandan cada vez que se hace una pulsación manual. Lo mejor es dejarlo a 1, es una opción por si se atasca en una velocidad donde no debería.
+[Backslash steps]
+Distancia en pasos del desplazamiento para compensar el backslash. Solamente se aplica al hacer un GoTo a la posición de inicio.
+[FAST increment]
+Incremento para algunas opciones de menú cuando está activado el modo FAST (led de avance rápido encendido)
+[Manual source]
+Entrada para el avance manual (botones o joystick). Desactivado en algunos casos.
+[Save settings]
+Guardar las opciones en memoria no volátil
+[Load last saved]
+Recuperar las opciones guardadas (como si lo apagaras/encendieras)
+[Load defaults]
+Cargar las opciones básicas por defecto
+[Camera test shot]
+Disparar una foto individual. Equivalente a pulsar el botón *rojo*
+[uSteps & gear]
+Muestra los pasos totales por vuelta y la proporción por distancia
+[GoFWD XXX steps]*
+Avanza de golpe los pasos especificados en la opción *Step distance*
+[GoBCK XXX steps]*
+Retrocede de golpe los pasos especificados en la opción *Step distance*
+[GoTo START pos.]*
+Se sitúa en la posición marcada como de inicio de secuencia, aplicando los pasos de backslash para compensar holguras de engranajes - desactivada si no está definida la posición de inicio de secuencia
+[GoTo END pos.]*
+Se sitúa en la posición marcada como de final de secuencia - desactivada si no está definida la posición de final de secuencia
+
+#############################################################
+# Flujo de secuencia                                        #
+#############################################################
+1) Si está en modo Start/End: Movimiento a la posición de inicio, aplicando backslash
+
+2) Flujo de disparo: 
+	2.1 pausa tras movimiento (Motor post delay)
+	2.2 disparo de foto y espera de exposición (Exposure time)
+	2.3 pausa tras disparo (Exp. post delay)
+	---> vuelta a (2.2) el numero de veces configurada en la opción bracketing
+
+3) Movimiento al siguiente punto
+---> vuelta a (2) para cada exposición de la serie
+
+4) Movimiento a la posición inicial si está activada la opción de regreso a inicio (Return to start)
